@@ -1,33 +1,51 @@
-:root { --primary: #059669; --primary-light: #ecfdf5; --bg-color: #f3f4f6; --text-main: #1f2937; --text-sub: #6b7280; }
-body { font-family: 'Padauk', sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); padding-bottom: 40px; }
-
-.header { background: linear-gradient(135deg, #059669, #047857); color: white; text-align: center; padding: 40px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.header img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; margin-bottom: 10px; }
-.header h1 { margin: 0 0 10px 0; font-size: 24px; }
-.header p { margin: 0; font-size: 14px; opacity: 0.9; max-width: 600px; margin: auto; }
-
-.container { max-width: 700px; margin: 30px auto; padding: 0 15px; }
-
-.card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 15px; display: flex; gap: 20px; align-items: center; border: 1px solid #e5e7eb; transition: 0.2s; }
-.card:hover { border-color: var(--primary); }
-
-.user-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-light); flex-shrink: 0; }
-
-.info-box { flex: 1; }
-.info-box h3 { margin: 0 0 8px 0; color: var(--primary); font-size: 18px; }
-
-.social-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-.social-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; color: white; }
-.bg-fb { background: #1877f2; }
-.bg-tg { background: #229ed9; }
-.bg-viber { background: #7360f2; }
-.bg-tt { background: #010101; }
-.bg-yt { background: #ff0000; }
-
-.btn-ss { background: var(--primary-light); color: var(--primary); border: 1px solid #a7f3d0; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Padauk', sans-serif; transition: 0.2s; }
-.btn-ss:hover { background: #d1fae5; }
-
-@media (max-width: 480px) {
-    .card { flex-direction: column; text-align: center; align-items: center; }
-    .social-badges { justify-content: center; }
+:root {
+    --primary: #059669;
+    --primary-light: #ecfdf5;
+    --bg-color: #f3f4f6;
+    --text-main: #1f2937;
 }
+
+body { font-family: 'Padauk', sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); }
+
+/* Header ပိုင်း */
+.header { background: var(--primary); color: white; text-align: center; padding: 40px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.header img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid white; object-fit: cover; margin-bottom: 10px; background: white; }
+.header h1 { margin: 0 0 10px 0; font-size: 24px; letter-spacing: 1px; }
+.header p { margin: 0; font-size: 14px; opacity: 0.9; max-width: 600px; margin: auto; line-height: 1.5; }
+
+/* အဖွဲ့ဝင်ကတ်များ နေရာ */
+.container { max-width: 800px; margin: 30px auto; padding: 0 15px; }
+.members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+/* ကတ် (နှိပ်လို့ရကြောင်း ပြရန် Hover Effect ထည့်ထားသည်) */
+.member-card { background: white; padding: 25px 20px; border-radius: 16px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid #e5e7eb; }
+.member-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: var(--primary-light); }
+.member-card img { width: 80px; height: 80px; border-radius: 50%; border: 3px solid var(--primary-light); object-fit: cover; margin-bottom: 15px; }
+.member-card h3 { margin: 0; color: var(--primary); font-size: 18px; }
+.member-card p { margin: 5px 0 0 0; font-size: 14px; color: #6b7280; }
+
+/* နှိပ်လိုက်လျှင် ပေါ်လာမည့် Modal Popup ဒီဇိုင်း */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+.modal-content { background-color: #fff; margin: 10% auto; padding: 25px; border-radius: 16px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+.close-btn { position: absolute; right: 20px; top: 15px; color: #9ca3af; font-size: 28px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.close-btn:hover { color: #dc2626; }
+
+.modal-header { text-align: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 20px; margin-bottom: 20px; }
+.modal-header img { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--primary); object-fit: cover; margin-bottom: 10px; }
+.modal-header h2 { margin: 0; color: #1f2937; font-size: 20px; }
+
+.modal-body h3 { font-size: 15px; color: #4b5563; margin-bottom: 10px; border-left: 3px solid var(--primary); padding-left: 8px; }
+
+/* Social Links အတွက် ဇယားကွက် (Table) */
+.social-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+.social-table td { padding: 12px 10px; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+.social-table td:first-child { font-weight: bold; color: #374151; width: 40%; }
+.social-table td a { display: inline-block; background: var(--primary-light); color: var(--primary); padding: 6px 15px; border-radius: 20px; text-decoration: none; font-weight: bold; transition: 0.2s; font-size: 13px; }
+.social-table td a:hover { background: var(--primary); color: white; }
+
+/* SS ပုံများအတွက် Grid */
+.ss-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+.ss-grid img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; border: 1px solid #e5e7eb; cursor: pointer; transition: 0.2s; }
+.ss-grid img:hover { transform: scale(1.05); }
