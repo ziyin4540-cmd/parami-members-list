@@ -1,0 +1,33 @@
+:root { --primary: #059669; --primary-light: #ecfdf5; --bg-color: #f3f4f6; --text-main: #1f2937; --text-sub: #6b7280; }
+body { font-family: 'Padauk', sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-main); padding-bottom: 40px; }
+
+.header { background: linear-gradient(135deg, #059669, #047857); color: white; text-align: center; padding: 40px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.header img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid white; margin-bottom: 10px; }
+.header h1 { margin: 0 0 10px 0; font-size: 24px; }
+.header p { margin: 0; font-size: 14px; opacity: 0.9; max-width: 600px; margin: auto; }
+
+.container { max-width: 700px; margin: 30px auto; padding: 0 15px; }
+
+.card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 15px; display: flex; gap: 20px; align-items: center; border: 1px solid #e5e7eb; transition: 0.2s; }
+.card:hover { border-color: var(--primary); }
+
+.user-avatar { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-light); flex-shrink: 0; }
+
+.info-box { flex: 1; }
+.info-box h3 { margin: 0 0 8px 0; color: var(--primary); font-size: 18px; }
+
+.social-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.social-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; color: white; }
+.bg-fb { background: #1877f2; }
+.bg-tg { background: #229ed9; }
+.bg-viber { background: #7360f2; }
+.bg-tt { background: #010101; }
+.bg-yt { background: #ff0000; }
+
+.btn-ss { background: var(--primary-light); color: var(--primary); border: 1px solid #a7f3d0; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; font-family: 'Padauk', sans-serif; transition: 0.2s; }
+.btn-ss:hover { background: #d1fae5; }
+
+@media (max-width: 480px) {
+    .card { flex-direction: column; text-align: center; align-items: center; }
+    .social-badges { justify-content: center; }
+}
