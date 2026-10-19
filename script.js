@@ -4,7 +4,7 @@ const myDB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allApprovedMembers = [];
 
-// Link 404 Error မတက်စေရန် https:// အလိုအလျောက် တပ်ဆင်ပေးသည့် Helper
+// 404 Error မတက်စေရန် https:// အလိုအလျောက် တပ်ဆင်ပေးသည့် Helper
 function formatUrl(urlStr) {
     if (!urlStr) return '#';
     let trimmed = urlStr.trim();
@@ -38,17 +38,20 @@ async function loadPublicMembers() {
 
     let html = '';
     members.forEach(m => {
-        // Profile Url အမှန်ကို ယူသုံးထားသည်
         let photo = m.profile_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
         let name = m.name || m.username || 'အမည်မရှိ အဖွဲ့ဝင်';
         let role = m.role || 'အဖွဲ့ဝင်';
 
         html += `
-        <div class="member-card" style="background: white; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.06); margin-bottom: 15px;">
-            <img src="${photo}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #059669; margin: 0 auto 12px auto; display: block;" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
-            <h3 style="margin: 0; font-size: 16px; color: #1f2937;">${name}</h3>
-            <p style="margin: 4px 0 15px 0; font-size: 13px; color: #6b7280;">( ${role} )</p>
-            <button onclick="openMemberModalByUsername('${m.username}')" style="background: #ecfdf5; color: #059669; border: 1px solid #10b981; padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer;">
+        <div class="member-card">
+            <div class="member-info">
+                <img src="${photo}" class="member-avatar" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+                <div class="member-details">
+                    <h3>${name}</h3>
+                    <p>( ${role} )</p>
+                </div>
+            </div>
+            <button onclick="openMemberModalByUsername('${m.username}')" class="btn-detail">
                 အသေးစိတ် ကြည့်ရန် နှိပ်ပါ
             </button>
         </div>`;
@@ -57,21 +60,21 @@ async function loadPublicMembers() {
     container.innerHTML = html;
 }
 
-// ၂။ Modal Popup ကို Profile ပုံ၊ Link နှင့် SS များပါဝင်အောင် ပြသခြင်း
+// ၂။ Modal Popup ကို Profile ပုံ၊ Link အမှန်နှင့် SS ပုံများဖြင့် ပြသပေးခြင်း
 function openMemberModalByUsername(username) {
     const member = allApprovedMembers.find(m => m.username === username);
     if (!member) return;
 
-    // Header အချက်အလက်နှင့် Profile Photo
+    // Header Info & Profile Photo
     document.getElementById('modal-member-name').innerText = member.name || member.username;
-    document.getElementById('modal-member-role').innerText = member.role || 'အဖွဲ့ဝင်';
+    document.getElementById('modal-member-role').innerText = `( ${member.role || 'အဖွဲ့ဝင်'} )`;
     
     const modalPhoto = document.getElementById('modal-member-photo');
     if (modalPhoto) {
         modalPhoto.src = member.profile_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
     }
 
-    // Social Links & SS များ ဖတ်ရှုခြင်း
+    // Parse Social Links
     let linksArray = [];
     if (member.social_links) {
         try {
@@ -88,7 +91,7 @@ function openMemberModalByUsername(username) {
             let pLink = formatUrl(item.link);
             let ssUrl = item.ss;
 
-            // Link စာရင်း
+            // Social Link Row
             linksHtml += `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
                 <div style="display: flex; align-items: center; gap: 8px;">
@@ -98,7 +101,7 @@ function openMemberModalByUsername(username) {
                 <a href="${pLink}" target="_blank" style="background: #059669; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold;">ဆက်သွယ်ရန်</a>
             </div>`;
 
-            // SS Image စာရင်း (နှိပ်လျှင် ပုံအကြီး ပွင့်မည်)
+            // SS Image Grid Item
             if (ssUrl) {
                 ssHtml += `
                 <div style="text-align: center;">
@@ -122,7 +125,7 @@ function openMemberModalByUsername(username) {
     document.getElementById('modal-social-links-list').innerHTML = linksHtml;
     document.getElementById('modal-ss-grid').innerHTML = ssHtml;
 
-    // Modal Display ဖွင့်ရန်
+    // Open Modal
     const modal = document.getElementById('member-detail-modal');
     if (modal) modal.style.display = 'flex';
 }
@@ -132,5 +135,13 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// စာမျက်နှာ စတင်သည်နှင့် အဖွဲ့ဝင်များ ဆွဲထုတ်ရန်
+// Modal ပြင်ပနှိပ်ပါက ပိတ်ရန်
+window.onclick = function(event) {
+    const modal = document.getElementById('member-detail-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};
+
+// Initialize Load
 loadPublicMembers();
