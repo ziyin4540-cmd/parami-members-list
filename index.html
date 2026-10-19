@@ -3,24 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Parami Group Members - တရားဝင် အဖွဲ့ဝင်များ စာရင်း</title>
+    <title>Parami Group Members</title>
+    <!-- Supabase CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Header အပိုင်း -->
     <div class="header">
         <img src="logo.png" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
         <h1>Parami Group Members</h1>
         <p>အလှူခံရာတွင် အလွဲသုံးစားလုပ်မှုများ မရှိစေရန် တရားဝင် အဖွဲ့ဝင်များနှင့်သာ ဆက်သွယ်လှူဒါန်းပါရန်</p>
     </div>
 
+    <!-- အဖွဲ့ဝင်များ ပြသမည့် နေရာ -->
     <div class="container">
-        <div id="directory-list">
-            <p style="text-align:center; color:#6b7280;">အဖွဲ့ဝင်စာရင်းများကို ချိတ်ဆက်နေပါသည်...</p>
+        <div id="members-grid" class="members-grid">
+            <p style="text-align:center; color:#6b7280; width: 100%;">အဖွဲ့ဝင်များ စာရင်းကို ချိတ်ဆက်နေပါသည်...</p>
+        </div>
+    </div>
+
+    <!-- ကတ်ကို နှိပ်မှ ပေါ်လာမည့် အသေးစိတ်ပြ ပေါ့ပ်အပ် (Modal Popup) -->
+    <div id="member-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <div class="modal-header">
+                <img id="modal-img" src="" alt="Profile">
+                <h2 id="modal-name">အမည်</h2>
+                <p id="modal-role" style="color: #059669; font-size: 14px; margin: 5px 0 0 0;"></p>
+            </div>
+            
+            <div class="modal-body">
+                <h3><i class="fas fa-address-book"></i> ဆက်သွယ်ရန် လင့်ခ်များ</h3>
+                <table class="social-table">
+                    <tbody id="modal-social-table">
+                        <!-- JS မှ ဇယားကွက် အလိုအလျောက် ဝင်လာမည် -->
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 20px;"><i class="fas fa-images"></i> အတည်ပြုချက် မှတ်တမ်း (SS)</h3>
+                <div id="modal-ss-grid" class="ss-grid">
+                    <!-- JS မှ ပုံများ အလိုအလျောက် ဝင်လာမည် -->
+                </div>
+            </div>
         </div>
     </div>
 
