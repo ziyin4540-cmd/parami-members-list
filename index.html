@@ -147,4 +147,54 @@
             margin: 15px 0 8px 0;
             border-bottom: 1px solid #e5e7eb;
             padding-bottom: 4px;
+        }
+        .ss-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-card">
+            <img src="logo.png" class="header-logo" alt="Logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'">
+            <h1>Parami Group Members</h1>
+            <p>အဖွဲ့ဝင်များ စာရင်းနှင့် တိုက်ရိုက် ဆက်သွယ်ရန် လမ်းကြောင်းများ</p>
+        </div>
+
+        <div id="public-members-grid">
+            <p style="text-align: center; color: #6b7280;">အဖွဲ့ဝင်များ စာရင်း ဆွဲထုတ်နေပါသည်...</p>
+        </div>
+    </div>
+
+    <!-- Member Detail Modal -->
+    <div id="member-detail-modal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
             
+            <img id="modal-member-photo" class="modal-profile-img" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+            <h3 id="modal-member-name" style="text-align: center; margin: 0; color: #1f2937;">-</h3>
+            <p id="modal-member-role" style="text-align: center; margin: 4px 0 0 0; font-size: 13px; color: #6b7280;">( - )</p>
+
+            <div class="modal-section-title"><i class="fas fa-link" style="color: #059669;"></i> ဆက်သွယ်ရန် လမ်းကြောင်းများ</div>
+            <div id="modal-social-links-list"></div>
+
+            <div class="modal-section-title"><i class="fas fa-check-circle" style="color: #059669;"></i> အတည်ပြုချက် မှတ်တမ်း (SS)</div>
+            <div id="modal-ss-grid" class="ss-grid"></div>
+        </div>
+    </div>
+
+    <!-- Image Viewer Modal (SS ပုံအကြီးကြည့်ရန်) -->
+    <div id="image-viewer-modal" class="modal-overlay" style="z-index: 1100;">
+        <div style="position: relative; max-width: 90%; max-height: 90vh;">
+            <button class="close-btn" onclick="closeImageViewer()" style="position: absolute; top: -12px; right: -12px; z-index: 10; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.3); border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer;">&times;</button>
+            <img id="full-image-preview" src="" style="max-width: 100%; max-height: 80vh; border-radius: 12px; object-fit: contain; display: block; margin: 0 auto; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
