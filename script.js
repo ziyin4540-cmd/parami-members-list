@@ -4,7 +4,7 @@ const myDB = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let allApprovedMembers = [];
 
-// 404 Error မတက်စေရန် https:// အလိုအလျောက် တပ်ဆင်ပေးသည့် Helper
+// Link 404 Error မတက်စေရန် https:// အလိုအလျောက် တပ်ဆင်ပေးသည့် Helper
 function formatUrl(urlStr) {
     if (!urlStr) return '#';
     let trimmed = urlStr.trim();
@@ -12,6 +12,18 @@ function formatUrl(urlStr) {
         return 'https://' + trimmed;
     }
     return trimmed;
+}
+
+// Telegram/Social Handle (@username) သို့မဟုတ် Link စာသား ထုတ်ယူပေးသည့် Helper
+function getDisplayHandle(urlStr) {
+    if (!urlStr) return '';
+    let clean = urlStr.trim();
+    if (clean.includes('t.me/')) {
+        let parts = clean.split('t.me/');
+        let handle = parts[1] ? parts[1].replace('/', '') : '';
+        if (handle) return '@' + handle;
+    }
+    return clean.replace(/^https?:\/\//, '');
 }
 
 // ၁။ အတည်ပြုပြီးသော အဖွဲ့ဝင်များ စာရင်းကို Database မှ ဆွဲထုတ်ခြင်း
@@ -60,7 +72,7 @@ async function loadPublicMembers() {
     container.innerHTML = html;
 }
 
-// ၂။ Modal Popup ကို Profile ပုံ၊ Link အမှန်နှင့် SS ပုံများဖြင့် ပြသပေးခြင်း
+// ၂။ Modal Popup ကို Profile ပုံ၊ Link အမှန်/Username နှင့် SS ပုံများဖြင့် ပြသပေးခြင်း
 function openMemberModalByUsername(username) {
     const member = allApprovedMembers.find(m => m.username === username);
     if (!member) return;
@@ -89,38 +101,39 @@ function openMemberModalByUsername(username) {
         linksArray.forEach(item => {
             let pName = item.platform || 'Social Link';
             let pLink = formatUrl(item.link);
+            let displayHandle = getDisplayHandle(item.link);
             let ssUrl = item.ss;
 
             // Social Link Row
             linksHtml += `
             <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-link" style="color: #059669;"></i>
-                    <span style="font-weight: bold; font-size: 14px; color: #374151;">${pName}</span>
+                <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-link" style="color: #059669;"></i>
+                        <span style="font-weight: bold; font-size: 14px; color: #374151;">${pName}</span>
+                    </div>
+                    <span style="font-size: 13px; color: #059669; font-weight: bold; margin-left: 22px; word-break: break-all;">
+                        ${displayHandle || pLink}
+                    </span>
                 </div>
-                <a href="${pLink}" target="_blank" style="background: #059669; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold;">ဆက်သွယ်ရန်</a>
+                <a href="${pLink}" target="_blank" style="background: #059669; color: white; padding: 6px 14px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; white-space: nowrap;">
+                    သွားမည်
+                </a>
             </div>`;
 
-            // SS Image Grid Item
+            // SS Image Item (နှိပ်လျှင် စာမျက်နှာ မကူးဘဲ ပုံကြီးပွင့်မည်)
             if (ssUrl) {
                 ssHtml += `
                 <div style="text-align: center;">
                     <p style="font-size: 11px; color: #4b5563; margin-bottom: 4px; font-weight: bold;">${pName} SS</p>
-                    <a href="${ssUrl}" target="_blank">
-                        <img src="${ssUrl}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #d1d5db; cursor: pointer;">
-                    </a>
+                    <img src="${ssUrl}" onclick="openImageViewer('${ssUrl}')" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #d1d5db; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                 </div>`;
             }
         });
     }
 
-    if (!linksHtml) {
-        linksHtml = `<p style="font-size: 13px; color: #6b7280; text-align: center; margin: 10px 0;">ဆက်သွယ်ရန် လင့်ခ် မရှိသေးပါခင်ဗျာ</p>`;
-    }
-
-    if (!ssHtml) {
-        ssHtml = `<p style="font-size: 13px; color: #6b7280; text-align: center; margin: 10px 0; grid-column: 1 / -1;">အတည်ပြုချက် မှတ်တမ်း (SS) မရှိသေးပါခင်ဗျာ</p>`;
-    }
+    if (!linksHtml) linksHtml = `<p style="font-size: 13px; color: #6b7280; text-align: center; margin: 10px 0;">ဆက်သွယ်ရန် လင့်ခ် မရှိသေးပါခင်ဗျာ</p>`;
+    if (!ssHtml) ssHtml = `<p style="font-size: 13px; color: #6b7280; text-align: center; margin: 10px 0; grid-column: 1 / -1;">အတည်ပြုချက် မှတ်တမ်း (SS) မရှိသေးပါခင်ဗျာ</p>`;
 
     document.getElementById('modal-social-links-list').innerHTML = linksHtml;
     document.getElementById('modal-ss-grid').innerHTML = ssHtml;
@@ -135,11 +148,33 @@ function closeModal() {
     if (modal) modal.style.display = 'none';
 }
 
+// ၃။ SS ပုံများကို စာမျက်နှာ မကူးဘဲ ပုံအကြီး ကြည့်နိုင်သည့် Function များ
+function openImageViewer(url) {
+    const viewer = document.getElementById('image-viewer-modal');
+    const img = document.getElementById('full-image-preview');
+    if (viewer && img) {
+        img.src = url;
+        viewer.style.display = 'flex';
+    }
+}
+
+function closeImageViewer() {
+    const viewer = document.getElementById('image-viewer-modal');
+    if (viewer) {
+        viewer.style.display = 'none';
+    }
+}
+
 // Modal ပြင်ပနှိပ်ပါက ပိတ်ရန်
 window.onclick = function(event) {
-    const modal = document.getElementById('member-detail-modal');
-    if (event.target === modal) {
-        modal.style.display = 'none';
+    const memberModal = document.getElementById('member-detail-modal');
+    const imageModal = document.getElementById('image-viewer-modal');
+    
+    if (event.target === memberModal) {
+        memberModal.style.display = 'none';
+    }
+    if (event.target === imageModal) {
+        imageModal.style.display = 'none';
     }
 };
 
